@@ -1,15 +1,10 @@
-var http = require('http');
-var dt = require('./returnDate.js');
-var url = require('url');
+const express = require('express')
+const path = require('path')
+const PORT = process.env.PORT || 5000
 
-http.createServer(function (req, res) {
-    res.writeHead(200, {'Content-Type': 'text/html'});
-	res.write('Hello World!, time is '+ dt.myDateTime());
-	res.write('<br>you asked for req.url : ' + req.url);
-	
-	var q = url.parse(req.url, true).query;
-	res.write('<br>using require url : q.year=' + q.year + " , q.month=" + q.month);
-	
-	
-    res.end();
-}).listen(8080);
+express()
+  .use(express.static(path.join(__dirname, 'public')))
+  .set('views', path.join(__dirname, 'views'))
+  .set('view engine', 'ejs')
+  .get('/', (req, res) => res.render('pages/index'))
+  .listen(PORT, () => console.log(`Listening on ${ PORT }`))
